@@ -21,7 +21,7 @@ struct BoardContext {
 }
 
 #[derive(serde::Serialize)]
-struct AboutContext {
+struct LayoutContext {
     parent: &'static str
 }
 
@@ -48,7 +48,14 @@ fn board(username: String) -> Template {
 
 #[get("/about")]
 fn about() -> Template {
-    Template::render("about", &AboutContext {
+    Template::render("about", &LayoutContext {
+        parent: "layout"
+    })
+}
+
+#[get("/profile")]
+fn profile() -> Template {
+    Template::render("profile", &LayoutContext {
         parent: "layout"
     })
 }
@@ -56,11 +63,7 @@ fn about() -> Template {
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-    .mount("/", routes![index,about,board])
+    .mount("/", routes![index,about,board,profile])
     .mount("/hello", routes![world, about])
     .attach(Template::fairing())
 }
-
-// fn main() {
-//     rocket::build().mount("/", routes![index]).launch();
-// }
